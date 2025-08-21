@@ -27,6 +27,11 @@ const LinkForm: React.FC<LinkFormProps> = ({
       setUrl(editingLink.url);
       setDescription(editingLink.description);
       setTags(editingLink.tags.join(", "));
+    } else {
+      setTitle("");
+      setUrl("");
+      setDescription("");
+      setTags("");
     }
   }, [editingLink]);
 
@@ -47,16 +52,13 @@ const LinkForm: React.FC<LinkFormProps> = ({
     };
 
     if (editingLink) {
-      onUpdate(updatedLink);
-      clearEditing();
+      onUpdate(updatedLink); // Call update function
     } else {
-      onAdd(updatedLink);
+      onAdd(updatedLink); // Call add function
     }
 
-    setTitle("");
-    setUrl("");
-    setDescription("");
-    setTags("");
+    // Clear form and exit edit mode
+    clearEditing();
   };
 
   return (

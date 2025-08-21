@@ -3,7 +3,7 @@ import { LinkItem } from "./types";
 import LinkForm from "./components/LinkForm";
 import LinkList from "./components/LinkList";
 import SearchBar from "./components/SearchBar";
-import { FaPlus, FaList, FaSearch, FaTimes } from "react-icons/fa"; // Added FaTimes for exit
+import { FaPlus, FaList, FaSearch, FaTimes } from "react-icons/fa";
 import "./App.css";
 
 // Type assertion to satisfy TypeScript
@@ -48,16 +48,25 @@ function App() {
     }
   };
 
-  const handleEditLink = (link: LinkItem) => setEditingLink(link);
+  const handleEditLink = (link: LinkItem) => {
+    setEditingLink(link);
+    setShowForm(true);
+    setShowLinks(false);
+    setShowSearch(false);
+  };
 
   const handleUpdateLink = (updatedLink: LinkItem) => {
     setLinks((prev) => prev.map((l) => (l.id === updatedLink.id ? updatedLink : l)));
     setMessage(`Link "${updatedLink.title}" updated successfully!`);
     setTimeout(() => setMessage(null), 3000);
     setEditingLink(null);
+    setShowForm(false);
   };
 
-  const clearEditing = () => setEditingLink(null);
+  const clearEditing = () => {
+    setEditingLink(null);
+    setShowForm(false);
+  };
 
   const matchesQuery = (link: LinkItem, query: string) => {
     if (!query.trim()) return true;
@@ -140,7 +149,7 @@ function App() {
           <div className="form-container">
             <button
               className="exit-btn"
-              onClick={() => setShowForm(false)}
+              onClick={() => clearEditing()}
             >
               <IconTimes />
             </button>
