@@ -1,9 +1,12 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { LinkItem } from "./types";
 import LinkForm from "./components/LinkForm";
 import LinkList from "./components/LinkList";
 import SearchBar from "./components/SearchBar";
+import ConfirmModal from "./components/ConfirmModal";
 import { FaPlus, FaList, FaSearch, FaTimes } from "react-icons/fa";
+import { useLocalStorage } from "./hooks/useLocalStorage";
+import { STORAGE_KEY, MESSAGE_DURATION } from "./constants";
 import "./App.css";
 
 // Type assertion to satisfy TypeScript
@@ -12,42 +15,80 @@ const IconList = FaList as React.FC<React.SVGProps<SVGSVGElement>>;
 const IconSearch = FaSearch as React.FC<React.SVGProps<SVGSVGElement>>;
 const IconTimes = FaTimes as React.FC<React.SVGProps<SVGSVGElement>>;
 
-const STORAGE_KEY = "links_vault_links";
-
 function App() {
-  const [links, setLinks] = useState<LinkItem[]>([]);
+  // Use custom hook for localStorage management
+  const [links, setLinks] = useLocalStorage<LinkItem[]>(STORAGE_KEY, []);
+  
   const [editingLink, setEditingLink] = useState<LinkItem | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showLinks, setShowLinks] = useState(false);
+  
+  // Confirmation modal state
+  const [confirmDelete, setConfirmDelete] = useState<{
+    isOpen: boolean;
+    linkId: string | null;
+    linkTitle: string;
+  }>({
+    isOpen: false,
+    linkId: null,
+    linkTitle: "",
+  });
 
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) setLinks(JSON.parse(stored));
-  }, []);
+  /**
+   * Display a temporary message to the user
+   */
+  const showMessage = (msg: string) => {
+    setMessage(msg);
+    setTimeout(() => setMessage(null), MESSAGE_DURATION);
+  };
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(links));
-  }, [links]);
-
+  /**
+   * Add a new link to the collection
+   */
   const handleAddLink = (link: LinkItem) => {
     setLinks((prev) => [...prev, link]);
-    setMessage(`Link "${link.title}" saved successfully!`);
-    setTimeout(() => setMessage(null), 3000);
+    showMessage(`Link "${link.title}" saved successfully!`);
     setShowForm(false);
   };
 
+  /**
+   * Delete a link with confirmation
+   */
   const handleDeleteLink = (id: string) => {
     const linkToDelete = links.find((l) => l.id === id);
-    if (window.confirm(`Are you sure you want to delete "${linkToDelete?.title}"?`)) {
-      setLinks((prev) => prev.filter((l) => l.id !== id));
-      setMessage(`Link "${linkToDelete?.title}" deleted successfully!`);
-      setTimeout(() => setMessage(null), 3000);
+    if (linkToDelete) {
+      setConfirmDelete({
+        isOpen: true,
+        linkId: id,
+        linkTitle: linkToDelete.title,
+      });
     }
   };
 
+  /**
+   * Confirm deletion
+   */
+  const confirmDeleteLink = () => {
+    if (confirmDelete.linkId) {
+      setLinks((prev) => prev.filter((l) => l.id !== confirmDelete.linkId));
+      showMessage(`Link "${confirmDelete.linkTitle}" deleted successfully!`);
+    }
+    setConfirmDelete({ isOpen: false, linkId: null, linkTitle: "" });
+  };
+
+  /**
+   * Cancel deletion
+   */
+  const cancelDelete = () => {
+    setConfirmDelete({ isOpen: false, linkId: null, linkTitle: "" });
+  };
+
+  /**
+   * Initiate editing a link
+   */
   const handleEditLink = (link: LinkItem) => {
     setEditingLink(link);
     setShowForm(true);
@@ -55,29 +96,41 @@ function App() {
     setShowSearch(false);
   };
 
+  /**
+   * Update an existing link
+   */
   const handleUpdateLink = (updatedLink: LinkItem) => {
     setLinks((prev) => prev.map((l) => (l.id === updatedLink.id ? updatedLink : l)));
-    setMessage(`Link "${updatedLink.title}" updated successfully!`);
-    setTimeout(() => setMessage(null), 3000);
+    showMessage(`Link "${updatedLink.title}" updated successfully!`);
     setEditingLink(null);
     setShowForm(false);
   };
 
+  /**
+   * Cancel editing and close form
+   */
   const clearEditing = () => {
     setEditingLink(null);
     setShowForm(false);
   };
 
-  const matchesQuery = (link: LinkItem, query: string) => {
+  /**
+   * Check if a link matches the search query
+   */
+  const matchesQuery = (link: LinkItem, query: string): boolean => {
     if (!query.trim()) return true;
     const q = query.toLowerCase();
-    const inTitle = link.title.toLowerCase().includes(q);
-    const inUrl = link.url.toLowerCase().includes(q);
-    const inDesc = link.description.toLowerCase().includes(q);
-    const inTags = link.tags.some((t) => t.toLowerCase().includes(q));
-    return inTitle || inUrl || inDesc || inTags;
+    return (
+      link.title.toLowerCase().includes(q) ||
+      link.url.toLowerCase().includes(q) ||
+      link.description.toLowerCase().includes(q) ||
+      link.tags.some((t) => t.toLowerCase().includes(q))
+    );
   };
 
+  /**
+   * Filter links based on search term
+   */
   const filteredLinks = useMemo(
     () => links.filter((l) => matchesQuery(l, searchTerm)),
     [links, searchTerm]
@@ -92,6 +145,8 @@ function App() {
       <div className="welcome">
         Welcome to Links Vault, your ultimate link management hub!
       </div>
+      
+      {/* Main action buttons */}
       <div className="options">
         <button
           className="option-btn"
@@ -100,8 +155,9 @@ function App() {
             setShowLinks(false);
             setShowSearch(false);
           }}
+          aria-label="Add a new link"
         >
-          <IconComponent /> Add a Link
+          <IconComponent aria-hidden="true" /> Add a Link
         </button>
         <button
           className="option-btn"
@@ -110,8 +166,9 @@ function App() {
             setShowForm(false);
             setShowSearch(false);
           }}
+          aria-label="View all saved links"
         >
-          <IconList /> View All Links
+          <IconList aria-hidden="true" /> View All Links
         </button>
         <button
           className="option-btn"
@@ -120,19 +177,25 @@ function App() {
             setShowForm(false);
             setShowLinks(false);
           }}
+          aria-label="Search through your links"
         >
-          <IconSearch /> Search Links
+          <IconSearch aria-hidden="true" /> Search Links
         </button>
       </div>
+      
+      {/* Success/Error messages */}
       {message && <p className="message">{message}</p>}
+      
+      {/* Search overlay */}
       {showSearch && (
         <div className="search-overlay visible">
           <div className="search-container">
             <button
               className="exit-btn"
               onClick={() => setShowSearch(false)}
+              aria-label="Close search"
             >
-              <IconTimes />
+              <IconTimes aria-hidden="true" />
             </button>
             <SearchBar value={searchTerm} onChange={setSearchTerm} />
             <LinkList
@@ -144,14 +207,17 @@ function App() {
           </div>
         </div>
       )}
+      
+      {/* Add/Edit form overlay */}
       {showForm && (
         <div className="form-overlay visible">
           <div className="form-container">
             <button
               className="exit-btn"
               onClick={() => clearEditing()}
+              aria-label="Close form"
             >
-              <IconTimes />
+              <IconTimes aria-hidden="true" />
             </button>
             <LinkForm
               onAdd={handleAddLink}
@@ -162,14 +228,17 @@ function App() {
           </div>
         </div>
       )}
+      
+      {/* View all links overlay */}
       {showLinks && (
         <div className="list-overlay visible">
           <div className="list-container">
             <button
               className="exit-btn"
               onClick={() => setShowLinks(false)}
+              aria-label="Close links view"
             >
-              <IconTimes />
+              <IconTimes aria-hidden="true" />
             </button>
             <LinkList
               links={filteredLinks}
@@ -180,6 +249,18 @@ function App() {
           </div>
         </div>
       )}
+      
+      {/* Confirmation Modal */}
+      <ConfirmModal
+        isOpen={confirmDelete.isOpen}
+        title="Delete Link?"
+        message={`Are you sure you want to delete "${confirmDelete.linkTitle}"? This action cannot be undone.`}
+        onConfirm={confirmDeleteLink}
+        onCancel={cancelDelete}
+        confirmText="Delete"
+        cancelText="Cancel"
+        isDangerous={true}
+      />
     </div>
   );
 }

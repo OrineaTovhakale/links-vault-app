@@ -315,3 +315,185 @@ h1 {
   .input, .textarea { padding: 10px; }
   .button, .cancel-btn { padding: 10px 20px; }
 }
+
+/* Add these styles to your existing App.css */
+
+/* Form improvements */
+.form h2 {
+  margin-bottom: 20px;
+  color: #003366;
+  font-size: 1.8rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Error states */
+.input-error {
+  border-color: #ff4d4d !important;
+  background-color: #fff5f5;
+}
+
+.error-message {
+  color: #ff4d4d;
+  font-size: 0.9rem;
+  margin: 5px 0 10px 0;
+  display: block;
+}
+
+/* Helper text */
+.helper-text,
+.char-count {
+  display: block;
+  color: #666;
+  font-size: 0.85rem;
+  margin: -10px 0 15px 0;
+}
+
+.char-count {
+  text-align: right;
+  color: #999;
+}
+
+/* Improve form spacing */
+.form > div {
+  margin-bottom: 15px;
+}
+
+/* Accessibility improvements */
+.input:focus,
+.textarea:focus,
+.search-input:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Better button states */
+.button:disabled,
+.cancel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button:focus,
+.cancel-btn:focus,
+.option-btn:focus,
+.edit-btn:focus,
+.delete-btn:focus {
+  outline: 2px solid #ffd700;
+  outline-offset: 2px;
+}
+
+/* Confirmation Modal Styles - Add to App.css */
+
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.confirm-modal {
+  background: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  max-width: 450px;
+  width: 90%;
+  color: #003366;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  text-align: center;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.confirm-icon {
+  margin-bottom: 20px;
+  font-size: 3rem;
+}
+
+.icon-danger {
+  color: #ff4d4d;
+  animation: pulse 0.5s ease-in-out;
+}
+
+.icon-warning {
+  color: #ffa500;
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.confirm-title {
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+  color: #003366;
+  font-weight: 600;
+}
+
+.confirm-message {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.confirm-actions .button,
+.confirm-actions .cancel-btn,
+.confirm-actions .delete-btn {
+  flex: 1;
+  padding: 12px 25px;
+  font-size: 1rem;
+  min-width: 120px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .confirm-modal {
+    padding: 30px 20px;
+  }
+  
+  .confirm-actions {
+    flex-direction: column-reverse;
+  }
+  
+  .confirm-actions .button,
+  .confirm-actions .cancel-btn,
+  .confirm-actions .delete-btn {
+    width: 100%;
+  }
+}
