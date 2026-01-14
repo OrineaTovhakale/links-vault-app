@@ -1,8 +1,10 @@
 import React, { useState, useEffect, FormEvent } from "react";
-import { LinkItem } from "../types";
-import { validateUrl, validateTitle, sanitizeInput, formatTags } from "../utils/validation";
-import { MAX_TAGS, MAX_DESCRIPTION_LENGTH } from "../constants";
+import { LinkItem } from "../../types";
+import { validateUrl, validateTitle, sanitizeInput, formatTags } from "../../utils";
+import { MAX_TAGS, MAX_DESCRIPTION_LENGTH } from "../../constants";
 
+// ... rest of your LinkForm.tsx code stays the same
+// ... rest of your LinkForm.tsx code stays the same
 interface LinkFormProps {
   onAdd: (link: LinkItem) => void;
   onUpdate: (link: LinkItem) => void;

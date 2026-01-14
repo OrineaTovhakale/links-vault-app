@@ -1,11 +1,8 @@
 import React, { useState, useMemo } from "react";
 import { LinkItem } from "./types";
-import LinkForm from "./components/LinkForm";
-import LinkList from "./components/LinkList";
-import SearchBar from "./components/SearchBar";
-import ConfirmModal from "./components/ConfirmModal";
+import { LinkForm, LinkList, SearchBar, ConfirmModal } from "./components";
 import { FaPlus, FaList, FaSearch, FaTimes } from "react-icons/fa";
-import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useLocalStorage } from "./hooks";
 import { STORAGE_KEY, MESSAGE_DURATION } from "./constants";
 import "./App.css";
 
@@ -15,6 +12,7 @@ const IconList = FaList as React.FC<React.SVGProps<SVGSVGElement>>;
 const IconSearch = FaSearch as React.FC<React.SVGProps<SVGSVGElement>>;
 const IconTimes = FaTimes as React.FC<React.SVGProps<SVGSVGElement>>;
 
+// ... rest of your App.tsx code stays the same
 function App() {
   // Use custom hook for localStorage management
   const [links, setLinks] = useLocalStorage<LinkItem[]>(STORAGE_KEY, []);
@@ -202,7 +200,7 @@ function App() {
               links={filteredLinks}
               onEdit={handleEditLink}
               onDelete={handleDeleteLink}
-              onTagClick={(tag) => setSearchTerm(tag)}
+              onTagClick={(tag: string) => setSearchTerm(tag)}
             />
           </div>
         </div>
@@ -244,7 +242,7 @@ function App() {
               links={filteredLinks}
               onEdit={handleEditLink}
               onDelete={handleDeleteLink}
-              onTagClick={(tag) => setSearchTerm(tag)}
+              onTagClick={(tag: string) => setSearchTerm(tag)}
             />
           </div>
         </div>
