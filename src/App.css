@@ -824,3 +824,275 @@ h1 {
     min-width: 44px;
   }
 }
+
+/* Final Polish & Improvements - Add to App.css */
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better focus visibility for accessibility */
+*:focus-visible {
+  outline: 2px solid #ffd700;
+  outline-offset: 2px;
+}
+
+/* Loading state for buttons */
+.button.loading,
+.option-btn.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.button.loading::after,
+.option-btn.loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  right: 10px;
+  margin-top: -8px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+
+/* Better link hover states */
+.card a {
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s;
+}
+
+.card a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: #007bff;
+  transition: width 0.3s;
+}
+
+.card a:hover::after {
+  width: 100%;
+}
+
+/* Improved overlay transitions */
+.form-overlay,
+.search-overlay,
+.list-overlay {
+  transition: opacity 0.3s ease-out;
+}
+
+.form-overlay.visible,
+.search-overlay.visible,
+.list-overlay.visible {
+  opacity: 1;
+}
+
+/* Better container max-height for scrolling */
+.list-container {
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.search-container {
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+/* Custom scrollbar */
+.list-container::-webkit-scrollbar,
+.search-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.list-container::-webkit-scrollbar-track,
+.search-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.list-container::-webkit-scrollbar-thumb,
+.search-container::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 10px;
+}
+
+.list-container::-webkit-scrollbar-thumb:hover,
+.search-container::-webkit-scrollbar-thumb:hover {
+  background: #0056b3;
+}
+
+/* Tag improvements */
+.tag {
+  transition: all 0.3s;
+  user-select: none;
+}
+
+.tag:active {
+  transform: scale(0.95);
+}
+
+/* Better card layout on very small screens */
+@media (max-width: 360px) {
+  .card {
+    padding: 15px;
+  }
+  
+  .card h3 {
+    font-size: 1.2rem;
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .edit-btn,
+  .delete-btn {
+    width: 100%;
+  }
+}
+
+/* Print styles */
+@media print {
+  .options,
+  .exit-btn,
+  .actions,
+  .toast,
+  .confirm-overlay,
+  .toolbar {
+    display: none !important;
+  }
+  
+  .app {
+    background: white;
+  }
+  
+  .card {
+    page-break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}
+
+/* Accessibility: Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .card {
+    border: 2px solid #000;
+  }
+  
+  .button,
+  .option-btn {
+    border: 2px solid #000;
+  }
+}
+
+/* Dark mode preparation (optional - not implemented but ready) */
+@media (prefers-color-scheme: dark) {
+  /* Future dark mode styles can go here */
+}
+
+/* Improved link states */
+a {
+  text-decoration-skip-ink: auto;
+}
+
+/* Better button active states */
+.button:active,
+.option-btn:active,
+.edit-btn:active,
+.delete-btn:active {
+  transform: scale(0.98);
+}
+
+/* Logo styling improvement */
+.logo {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  transition: transform 0.3s;
+}
+
+.logo:hover {
+  transform: rotate(10deg) scale(1.05);
+}
+
+/* Welcome message animation improvement */
+.welcome {
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* Ensure overlays are on top */
+.form-overlay,
+.search-overlay,
+.list-overlay {
+  z-index: 100;
+}
+
+.confirm-overlay {
+  z-index: 1000;
+}
+
+.toast {
+  z-index: 9999;
+}
+
+/* Skip to content link for screen readers */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+/* Screen Reader Only - Add to App.css */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
