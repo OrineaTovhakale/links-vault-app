@@ -7,4 +7,5 @@ export { default as SearchBar } from './SearchBar';
 export { default as ConfirmModal } from './ConfirmModal';
 export { default as EmptyState } from './EmptyState';
 export { default as Toast } from './Toast';
+export { default as Toolbar } from './Toolbar';
 export type { ToastType } from './Toast';

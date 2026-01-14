@@ -8,7 +8,8 @@ import { FaPlus, FaList, FaSearch, FaTimes } from "react-icons/fa";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { STORAGE_KEY, MESSAGE_DURATION } from "./constants";
 import "./App.css";
-import Toast, { ToastType } from "./components/Toast/Toast";
+import { ToastType, Toast, Toolbar } from "./components";
+import { SortOption, exportLinks, importLinks, sortLinks } from "./utils";
 
 // Type assertion to satisfy TypeScript
 const IconComponent = FaPlus as React.FC<React.SVGProps<SVGSVGElement>>;
@@ -29,6 +30,7 @@ function App() {
   const [showForm, setShowForm] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showLinks, setShowLinks] = useState(false);
+  const [sortBy, setSortBy] = useState<SortOption>("newest");
   
   // Confirmation modal state
   const [confirmDelete, setConfirmDelete] = useState<{
@@ -127,6 +129,37 @@ function App() {
   };
 
   /**
+   * Handle export links
+   */
+  const handleExport = () => {
+    exportLinks(links);
+    showToast("Links exported successfully!", "success");
+  };
+
+  /**
+   * Handle import links
+   */
+  const handleImport = async (file: File) => {
+    try {
+      const imported = await importLinks(file);
+      setLinks(imported);
+      showToast(`Successfully imported ${imported.length} links!`, "success");
+    } catch (error) {
+      showToast(
+        error instanceof Error ? error.message : "Failed to import links",
+        "error"
+      );
+    }
+  };
+
+  /**
+   * Handle sort change
+   */
+  const handleSortChange = (newSort: SortOption) => {
+    setSortBy(newSort);
+  };
+
+  /**
    * Check if a link matches the search query
    */
   const matchesQuery = (link: LinkItem, query: string): boolean => {
@@ -146,6 +179,14 @@ function App() {
   const filteredLinks = useMemo(
     () => links.filter((l) => matchesQuery(l, searchTerm)),
     [links, searchTerm]
+  );
+
+  /**
+   * Sort filtered links
+   */
+  const sortedLinks = useMemo(
+    () => sortLinks(filteredLinks, sortBy),
+    [filteredLinks, sortBy]
   );
 
   return (
@@ -215,9 +256,16 @@ function App() {
             >
               <IconTimes aria-hidden="true" />
             </button>
+            <Toolbar
+              onExport={handleExport}
+              onImport={handleImport}
+              onSortChange={handleSortChange}
+              currentSort={sortBy}
+              totalLinks={filteredLinks.length}
+            />
             <SearchBar value={searchTerm} onChange={setSearchTerm} />
             <LinkList
-              links={filteredLinks}
+              links={sortedLinks}
               onEdit={handleEditLink}
               onDelete={handleDeleteLink}
               onTagClick={(tag) => setSearchTerm(tag)}
@@ -260,8 +308,15 @@ function App() {
             >
               <IconTimes aria-hidden="true" />
             </button>
+            <Toolbar
+              onExport={handleExport}
+              onImport={handleImport}
+              onSortChange={handleSortChange}
+              currentSort={sortBy}
+              totalLinks={filteredLinks.length}
+            />
             <LinkList
-              links={filteredLinks}
+              links={sortedLinks}
               onEdit={handleEditLink}
               onDelete={handleDeleteLink}
               onTagClick={(tag) => setSearchTerm(tag)}
