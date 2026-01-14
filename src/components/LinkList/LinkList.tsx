@@ -1,5 +1,6 @@
 import React from "react";
 import { LinkItem } from "../../types";
+import EmptyState from "../EmptyState";
 
 interface LinkListProps {
   links: LinkItem[];
@@ -7,11 +8,31 @@ interface LinkListProps {
   onDelete: (id: string) => void;
   onTagClick?: (tag: string) => void;
   className?: string;
+  searchTerm?: string;
+  onAddLink?: () => void;
 }
 
-const LinkList: React.FC<LinkListProps> = ({ links, onEdit, onDelete, onTagClick, className }) => {
+const LinkList: React.FC<LinkListProps> = ({ 
+  links, 
+  onEdit, 
+  onDelete, 
+  onTagClick, 
+  className,
+  searchTerm,
+  onAddLink
+}) => {
   if (links.length === 0) {
-    return <p style={{ textAlign: "center" }}>No links saved yet.</p>;
+    // Show different empty states based on context
+    if (searchTerm) {
+      return <EmptyState type="no-results" searchTerm={searchTerm} />;
+    }
+    return (
+      <EmptyState 
+        type="no-links" 
+        onAction={onAddLink}
+        actionText="Add Your First Link"
+      />
+    );
   }
 
   return (

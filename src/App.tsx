@@ -1,8 +1,11 @@
 import React, { useState, useMemo } from "react";
 import { LinkItem } from "./types";
-import { LinkForm, LinkList, SearchBar, ConfirmModal } from "./components";
+import LinkForm from "./components/LinkForm";
+import LinkList from "./components/LinkList";
+import SearchBar from "./components/SearchBar";
+import ConfirmModal from "./components/ConfirmModal";
 import { FaPlus, FaList, FaSearch, FaTimes } from "react-icons/fa";
-import { useLocalStorage } from "./hooks";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 import { STORAGE_KEY, MESSAGE_DURATION } from "./constants";
 import "./App.css";
 
@@ -12,7 +15,6 @@ const IconList = FaList as React.FC<React.SVGProps<SVGSVGElement>>;
 const IconSearch = FaSearch as React.FC<React.SVGProps<SVGSVGElement>>;
 const IconTimes = FaTimes as React.FC<React.SVGProps<SVGSVGElement>>;
 
-// ... rest of your App.tsx code stays the same
 function App() {
   // Use custom hook for localStorage management
   const [links, setLinks] = useLocalStorage<LinkItem[]>(STORAGE_KEY, []);
@@ -113,6 +115,15 @@ function App() {
   };
 
   /**
+   * Open the add link form
+   */
+  const openAddLinkForm = () => {
+    setShowForm(true);
+    setShowLinks(false);
+    setShowSearch(false);
+  };
+
+  /**
    * Check if a link matches the search query
    */
   const matchesQuery = (link: LinkItem, query: string): boolean => {
@@ -200,7 +211,9 @@ function App() {
               links={filteredLinks}
               onEdit={handleEditLink}
               onDelete={handleDeleteLink}
-              onTagClick={(tag: string) => setSearchTerm(tag)}
+              onTagClick={(tag) => setSearchTerm(tag)}
+              searchTerm={searchTerm}
+              onAddLink={openAddLinkForm}
             />
           </div>
         </div>
@@ -242,7 +255,9 @@ function App() {
               links={filteredLinks}
               onEdit={handleEditLink}
               onDelete={handleDeleteLink}
-              onTagClick={(tag: string) => setSearchTerm(tag)}
+              onTagClick={(tag) => setSearchTerm(tag)}
+              searchTerm={searchTerm}
+              onAddLink={openAddLinkForm}
             />
           </div>
         </div>
