@@ -690,3 +690,137 @@ h1 {
     font-size: 1.3rem;
   }
 }
+
+/* Toolbar Styles - Add to App.css */
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.toolbar-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.link-count {
+  font-size: 1rem;
+  color: #003366;
+  font-weight: 600;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #003366;
+}
+
+.toolbar-select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  color: #003366;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.toolbar-select:hover {
+  border-color: #007bff;
+}
+
+.toolbar-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #007bff, #00b3ff);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+.toolbar-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.toolbar-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toolbar-btn svg {
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar-info,
+  .toolbar-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .toolbar-actions {
+    flex-direction: column;
+  }
+
+  .toolbar-group,
+  .toolbar-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .toolbar-select {
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .toolbar {
+    padding: 12px 15px;
+  }
+
+  .toolbar-btn span {
+    display: none;
+  }
+
+  .toolbar-btn {
+    justify-content: center;
+    min-width: 44px;
+  }
+}
