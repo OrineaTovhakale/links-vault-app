@@ -1,12 +1,12 @@
 import React from "react";
-import { LinkItem } from "../types";
+import { LinkItem } from "../../types";
 
 interface LinkListProps {
   links: LinkItem[];
   onEdit: (link: LinkItem) => void;
   onDelete: (id: string) => void;
   onTagClick?: (tag: string) => void;
-  className?: string; // Add optional className prop
+  className?: string;
 }
 
 const LinkList: React.FC<LinkListProps> = ({ links, onEdit, onDelete, onTagClick, className }) => {
@@ -25,7 +25,7 @@ const LinkList: React.FC<LinkListProps> = ({ links, onEdit, onDelete, onTagClick
           <p>{link.description}</p>
           {link.tags.length > 0 && (
             <div className="tags-row" aria-label="tags">
-              {link.tags.map((t) => (
+              {link.tags.map((t: string) => (
                 <button
                   key={t}
                   className="tag"
