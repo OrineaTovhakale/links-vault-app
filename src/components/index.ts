@@ -5,3 +5,4 @@ export { default as LinkForm } from './LinkForm';
 export { default as LinkList } from './LinkList';
 export { default as SearchBar } from './SearchBar';
 export { default as ConfirmModal } from './ConfirmModal';
+export { default as EmptyState } from './EmptyState';
