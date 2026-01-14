@@ -1,46 +1,133 @@
-# Getting Started with Create React App
+# Links Vault
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A web application for managing and organizing your links. Built with React and TypeScript.
 
-## Available Scripts
+## What It Does
 
-In the project directory, you can run:
+Links Vault allows you to store, search, and manage your important links in one place. All data is stored locally in your browser.
 
-### `npm start`
+### Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Add, edit, and delete links
+- Search across titles, URLs, descriptions, and tags
+- Organize links with custom tags
+- Sort links by date or title
+- Export your links as JSON
+- Import previously exported links
+- Real-time input validation
+- Responsive design for all devices
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Technologies Used
 
-### `npm test`
+- React 18
+- TypeScript
+- CSS3
+- Local Storage API
+- React Icons
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation
 
-### `npm run build`
+Clone the repository:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+git clone https://github.com/OrineaTovhakale/links-vault-app.git
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Navigate to the project directory:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+cd links-vault-app
+```
 
-### `npm run eject`
+Install dependencies:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+npm install
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Running the Application
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Start the development server:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```bash
+npm start
+```
 
-## Learn More
+The application will open in your browser at http://localhost:3000
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Building for Production
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Create a production build:
+
+```bash
+npm run build
+```
+
+The build files will be in the `build` folder.
+
+## Project Structure
+
+```
+src/
+├── components/         React components
+│   ├── ConfirmModal/   Delete confirmation dialog
+│   ├── EmptyState/     Empty state displays
+│   ├── LinkForm/       Form for adding/editing links
+│   ├── LinkList/       Display grid of link cards
+│   ├── SearchBar/      Search input
+│   ├── Toast/          Notification system
+│   └── Toolbar/        Sort and export/import controls
+├── constants/          Application constants
+├── hooks/              Custom React hooks
+├── utils/              Helper functions
+│   ├── validation.ts   Input validation
+│   ├── linkUtils.ts    Export/import/sort logic
+│   └── accessibility.ts Accessibility helpers
+├── types/              TypeScript interfaces
+├── App.tsx             Main application
+├── App.css             Styles
+└── index.tsx           Entry point
+```
+
+## Usage
+
+### Adding a Link
+
+1. Click "Add a Link"
+2. Fill in the title (required) and URL (required)
+3. Optionally add a description and tags (comma-separated)
+4. Click "Save Link"
+
+### Managing Links
+
+- View all links by clicking "View All Links"
+- Search by clicking "Search Links" and typing
+- Sort using the dropdown in the toolbar
+- Edit or delete links using the buttons on each card
+- Click tags to filter links
+
+### Export and Import
+
+- Export: Click the "Export" button to download all links as JSON
+- Import: Click "Import" and select a JSON file
+
+## Requirements
+
+- Node.js version 14 or higher
+- npm or yarn
+
+## Browser Support
+
+Works on all modern browsers including Chrome, Firefox, Safari, and Edge.
+
+## Data Storage
+
+All links are stored in your browser's local storage. Data persists between sessions but is specific to each browser and device.
+
+## License
+
+MIT License - see LICENSE file for details.
+
+## Author
+
+Orinea Tovhakale
