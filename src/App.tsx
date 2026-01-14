@@ -8,6 +8,7 @@ import { FaPlus, FaList, FaSearch, FaTimes } from "react-icons/fa";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { STORAGE_KEY, MESSAGE_DURATION } from "./constants";
 import "./App.css";
+import Toast, { ToastType } from "./components/Toast/Toast";
 
 // Type assertion to satisfy TypeScript
 const IconComponent = FaPlus as React.FC<React.SVGProps<SVGSVGElement>>;
@@ -21,7 +22,10 @@ function App() {
   
   const [editingLink, setEditingLink] = useState<LinkItem | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [message, setMessage] = useState<string | null>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: ToastType;
+  } | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showLinks, setShowLinks] = useState(false);
@@ -38,11 +42,10 @@ function App() {
   });
 
   /**
-   * Display a temporary message to the user
+   * Display a temporary toast notification
    */
-  const showMessage = (msg: string) => {
-    setMessage(msg);
-    setTimeout(() => setMessage(null), MESSAGE_DURATION);
+  const showToast = (message: string, type: ToastType = "success") => {
+    setToast({ message, type });
   };
 
   /**
@@ -50,7 +53,7 @@ function App() {
    */
   const handleAddLink = (link: LinkItem) => {
     setLinks((prev) => [...prev, link]);
-    showMessage(`Link "${link.title}" saved successfully!`);
+    showToast(`Link "${link.title}" saved successfully!`, "success");
     setShowForm(false);
   };
 
@@ -74,7 +77,7 @@ function App() {
   const confirmDeleteLink = () => {
     if (confirmDelete.linkId) {
       setLinks((prev) => prev.filter((l) => l.id !== confirmDelete.linkId));
-      showMessage(`Link "${confirmDelete.linkTitle}" deleted successfully!`);
+      showToast(`Link "${confirmDelete.linkTitle}" deleted successfully!`, "success");
     }
     setConfirmDelete({ isOpen: false, linkId: null, linkTitle: "" });
   };
@@ -101,7 +104,7 @@ function App() {
    */
   const handleUpdateLink = (updatedLink: LinkItem) => {
     setLinks((prev) => prev.map((l) => (l.id === updatedLink.id ? updatedLink : l)));
-    showMessage(`Link "${updatedLink.title}" updated successfully!`);
+    showToast(`Link "${updatedLink.title}" updated successfully!`, "success");
     setEditingLink(null);
     setShowForm(false);
   };
@@ -192,8 +195,14 @@ function App() {
         </button>
       </div>
       
-      {/* Success/Error messages */}
-      {message && <p className="message">{message}</p>}
+      {/* Toast notifications */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
       
       {/* Search overlay */}
       {showSearch && (
